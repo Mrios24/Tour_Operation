@@ -20,7 +20,6 @@ class CreateProveedoresTable extends Migration
             $table->string('email', 45);
             $table->string('telefono', 10);
             $table->string('detalle', 200);
-            $table->timestamps();
         });
     }
 

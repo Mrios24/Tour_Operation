@@ -12,9 +12,12 @@ class ChoferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $buscar = $request->get('buscar');
+
+        $datos['chofer'] = Chofer::where('codigo', 'like', '%' . $buscar . '%')->paginate(10);
+        return view('chofer.index', $datos);
     }
 
     /**
@@ -24,8 +27,9 @@ class ChoferController extends Controller
      */
     public function create()
     {
-        //
+        return view('chofer.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -36,6 +40,32 @@ class ChoferController extends Controller
     public function store(Request $request)
     {
         //
+        //
+        $campos = [
+            'codigo' => 'required|string|max:11',
+            'nombre' => 'required|string|max:20',
+            'tipo_chofer' => 'required|string|max:15',
+
+
+
+
+        ];
+
+        $mensaje = [
+
+            'codigo.required' => 'El codigo es requerido',
+            'nombre.required' => 'El nombre es requerido',
+            'tipo_chofer.required' => 'La tipo de chofer es requerida',
+
+
+        ];
+
+        $this->validate($request, $campos, $mensaje);
+
+        $datosChofer = request()->except('_token');
+        Chofer::insert($datosChofer);
+
+        return redirect('chofer')->with('mensaje', 'Chofer agregado');
     }
 
     /**
@@ -55,9 +85,11 @@ class ChoferController extends Controller
      * @param  \App\Models\Chofer  $chofer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Chofer $chofer)
+    public function edit($id)
     {
-        //
+        $chofer = Chofer::findOrFail($id);
+
+        return view('chofer.edit', compact('chofer'));
     }
 
     /**
@@ -67,9 +99,33 @@ class ChoferController extends Controller
      * @param  \App\Models\Chofer  $chofer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Chofer $chofer)
+    public function update(Request $request, $id)
     {
-        //
+        $campos = [
+            'codigo' => 'required|string|max:11',
+            'nombre' => 'required|string|max:20',
+            'tipo_chofer' => 'required|string|max:15',
+
+
+
+
+        ];
+
+        $mensaje = [
+
+            'codigo.required' => 'El codigo es requerido',
+            'nombre.required' => 'El nombre es requerido',
+            'tipo_chofer.required' => 'La tipo de chofer es requerida',
+
+
+        ];
+
+        $this->validate($request, $campos, $mensaje);
+
+        $datosChofer = request()->except('_token', '_method');
+        Chofer::where('codigo', 'like', '%' . $id . '%')->update($datosChofer);
+
+        return redirect('chofer')->with('mensaje', 'Chofer actualizado');
     }
 
     /**
@@ -78,8 +134,9 @@ class ChoferController extends Controller
      * @param  \App\Models\Chofer  $chofer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Chofer $chofer)
+    public function destroy($id)
     {
-        //
+        Chofer::where('codigo', 'like', '%' . $id . '%')->delete($id);
+        return redirect('chofer')->with('mensaje', 'Chofer eliminado');
     }
 }

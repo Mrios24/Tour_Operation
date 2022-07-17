@@ -8,25 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Vehiculos extends Model
 {
     use HasFactory;
-    public $codigo;
-    public $nombre;
-    public $tipoVehiculo;
+    public $timestamps = false;
 
-    public function __construct($codigo, $nombre, $tipoVehiculo)
+    public function path()
     {
-        $this->codigo = $codigo;
-        $this->nombre = $nombre;
-        $this->tipoVehiculo = $tipoVehiculo;
-    }
-
-    public function obtenerCodigo()
-    {
-        return $this->codigo;
-    }
-
-    public function ActualzarCodigo($codigo)
-    {
-        $this->codigo = $codigo;
-        return $this->codigo;
+        return '/vehiculo/' . $this->id;
     }
 }

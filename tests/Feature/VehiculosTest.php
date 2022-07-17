@@ -9,27 +9,27 @@ use Tests\TestCase;
 
 use app\Models;
 use App\Models\Vehiculos;
+use App\Http\Controllers\VehiculosController;
 
 class VehiculosTest extends TestCase
 {
     /**@test */
-    public function test_obtenerCodigo()
+    public function test_un_vehiculo_tiene_path()
     {
+        $vehiculo = Vehiculos::factory()->create();
 
-        $vehiculo = new Vehiculos('VEH-0001', 'Buseta', 'terrrestre');
 
-        $codigo = $vehiculo->obtenerCodigo();
-
-        $this->assertEquals($codigo, 'VEH-0001');
+        $this->assertEquals($vehiculo->path(), '/vehiculo/' . $vehiculo->id);
     }
 
-    public function test_ActualizarCodigo()
+    /**@test */
+    public function test_puedo_ver_un_vehiculo()
     {
+        $vehiculo = Vehiculos::factory()->create();
 
-        $vehiculo = new Vehiculos('VEH-0001', 'Buseta', 'terrrestre');
+        $response = $this->get($vehiculo->path());
 
-        $codigo = $vehiculo->ActualzarCodigo('VEH-0002');
-
-        $this->assertEquals($codigo, 'VEH-0002');
+        $response->assertStatus(200)
+            ->assertSee($vehiculo->code);
     }
 }

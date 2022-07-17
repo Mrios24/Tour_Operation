@@ -12,9 +12,12 @@ class ProveedoresController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $buscar = $request->get('buscar');
+
+        $datos['proveedor'] = Proveedores::where('codigo', 'like', '%' . $buscar . '%')->paginate(10);
+        return view('proveedor.index', $datos);
     }
 
     /**
@@ -24,7 +27,7 @@ class ProveedoresController extends Controller
      */
     public function create()
     {
-        //
+        return view('proveedor.create');
     }
 
     /**
@@ -35,7 +38,33 @@ class ProveedoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $campos = [
+            'nombre' => 'required|string|max:30',
+            'codigo' => 'required|string|max:10',
+            'email' => 'required|string|max:50',
+            'detalle' => 'required|string|max:200',
+            'telefono' => 'required|string|max:10',
+
+
+        ];
+
+        $mensaje = [
+
+            'nombre.required' => 'El Nombre es requerido',
+            'codigo.required' => 'El codigo es requerida',
+            'email.required' => 'El email es requerido',
+            'detalle.required' => 'El detalle es requerido',
+            'telefono.required' => 'El telefono es requerido',
+
+
+        ];
+
+        $this->validate($request, $campos, $mensaje);
+
+        $datosProveedor = request()->except('_token');
+        Proveedores::insert($datosProveedor);
+
+        return redirect('proveedor')->with('mensaje', 'Proveedor agregada');
     }
 
     /**
@@ -55,9 +84,11 @@ class ProveedoresController extends Controller
      * @param  \App\Models\Proveedores  $proveedores
      * @return \Illuminate\Http\Response
      */
-    public function edit(Proveedores $proveedores)
+    public function edit($id)
     {
-        //
+        $proveedor = Proveedores::findOrFail($id);
+
+        return view('proveedor.edit', compact('proveedor'));
     }
 
     /**
@@ -67,9 +98,35 @@ class ProveedoresController extends Controller
      * @param  \App\Models\Proveedores  $proveedores
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proveedores $proveedores)
+    public function update(Request $request, $id)
     {
-        //
+        $campos = [
+            'nombre' => 'required|string|max:30',
+            'codigo' => 'required|string|max:10',
+            'email' => 'required|string|max:50',
+            'detalle' => 'required|string|max:200',
+            'telefono' => 'required|string|max:10',
+
+
+        ];
+
+        $mensaje = [
+
+            'nombre.required' => 'El Nombre es requerido',
+            'codigo.required' => 'El codigo es requerida',
+            'email.required' => 'El email es requerido',
+            'detalle.required' => 'El detalle es requerido',
+            'telefono.required' => 'El telefono es requerido',
+
+
+        ];
+
+        $this->validate($request, $campos, $mensaje);
+
+        $datosProveedor = request()->except('_token', '_method');
+        Proveedores::where('codigo', 'like', '%' . $id . '%')->update($datosProveedor);
+
+        return redirect('proveedor')->with('mensaje', 'Proveedor actualizado');
     }
 
     /**
@@ -78,8 +135,9 @@ class ProveedoresController extends Controller
      * @param  \App\Models\Proveedores  $proveedores
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proveedores $proveedores)
+    public function destroy($id)
     {
-        //
+        Proveedores::where('codigo', 'like', '%' . $id . '%')->delete($id);
+        return redirect('proveedor')->with('mensaje', 'Proveedor eliminado');
     }
 }
