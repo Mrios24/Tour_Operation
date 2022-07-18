@@ -36,5 +36,20 @@ Route::resource('vehiculo', VehiculosController::class)->middleware('auth');
 Route::get('/', [App\Http\Controllers\PrincipalController::class, 'index'])->middleware('auth');
 Auth::routes();
 
+/* **************************************************************************************************/
+
 Route::get('/vehiculo/{vehiculo}', [VehiculosController::class, 'show']);
 Route::post('/vehiculo', [VehiculosController::class, 'store']);
+
+Route::get('/cliente/{cliente}', [ClienteController::class, 'show']);
+Route::post('/cliente', [ClienteController::class, 'store']);
+
+Route::get('/proveedor/{proveedor}', [ProveedoresController::class, 'show']);
+Route::post('/proveedor', [ProveedoresController::class, 'store']);
+
+Route::get('/gastos/{gasto}', [GastosController::class, 'show']);
+Route::post('/gastos', [GastosController::class, 'store']);
+
+
+Route::get('/chofer/{chofer}', [ChoferController::class, 'show']);
+Route::post('/chofer', [ChoferController::class, 'store']);

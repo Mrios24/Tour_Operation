@@ -16,10 +16,8 @@ class CreateChofersTable extends Migration
         Schema::create('chofers', function (Blueprint $table) {
             $table->id();
             $table->string('codigo', 10)->index();
-            $table->string('nombre', 30);
-            $table->string('tipo_chofer', 15);
-            
-         
+            $table->string('nombre', 60);
+            $table->string('tipo_chofer', 50);
         });
     }
 

@@ -9,4 +9,9 @@ class Gastos extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
+    public function path()
+    {
+        return '/gastos/' . $this->id;
+    }
 }

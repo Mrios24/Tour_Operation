@@ -10,4 +10,9 @@ class Cliente extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
+    public function path()
+    {
+        return '/cliente/' . $this->id;
+    }
 }

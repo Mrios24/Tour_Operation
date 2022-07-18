@@ -9,4 +9,9 @@ class Chofer extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
+    public function path()
+    {
+        return '/chofer/' . $this->id;
+    }
 }
